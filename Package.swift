@@ -25,20 +25,20 @@ let package: Package = .init(
 var DollupBinary: Target {
     var url: String {
         #if os(macOS)
-        "__BUNDLE_URL_MACOS__"
+        "https://download.rarestype.com/dollup/1.0.1/macOS-arm64/dollup.artifactbundle.zip"
         #elseif arch(x86_64)
-        "https://download.rarestype.com/dollup/deploy/Linux-x86_64/dollup.artifactbundle.zip"
+        "https://download.rarestype.com/dollup/1.0.1/Linux-x86_64/dollup.artifactbundle.zip"
         #else
-        "https://download.rarestype.com/dollup/deploy/Linux-aarch64/dollup.artifactbundle.zip"
+        "https://download.rarestype.com/dollup/1.0.1/Linux-aarch64/dollup.artifactbundle.zip"
         #endif
     }
     var checksum: String {
         #if os(macOS)
-        "__CHECKSUM_MACOS__"
+        "d89f257f3bed00ab99954866a5557246ddc7749602406869e07e11b5cbcca64e"
         #elseif arch(x86_64)
-        "319c532eeb7a04961ab1b19f973638f92be8fc5a182f523bc4ea35937f10ca8d"
+        "fd0d47694833a7d34d38e9e2d77627a51c2148694417d36a39d059a1bcfc1c6b"
         #else
-        "2c69a7ad96b017ab174055c4a8fde673dfb5628550ce578f9130ae96cf04adfc"
+        "d33189deac0acf6c29b8191e79bb845565fc23311e0a869a508c46a9d746e59e"
         #endif
     }
 
