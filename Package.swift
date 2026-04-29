@@ -38,7 +38,7 @@ var DollupBinary: Target {
         #elseif arch(x86_64)
         "f70e0a80428d9269d1f2f6c5ded8518bf77d04fafab61c313d0ea6c062e18c5a"
         #else
-        "af2b03272734ba4c674dc589dd9d701900b9ad8eb046474bba34990124619512"
+        "4987f83cb38fb25770799798ad84a127b2c0f54015f1261ae7d8e20ada465b6e"
         #endif
     }
 
