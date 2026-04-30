@@ -36,7 +36,7 @@ var DollupBinary: Target {
         #if os(macOS)
         "79eedeb3e870b51dc12d1e5cb75031afee09503340427353430abdc1095020ba"
         #elseif arch(x86_64)
-        "f70e0a80428d9269d1f2f6c5ded8518bf77d04fafab61c313d0ea6c062e18c5a"
+        "f7f0ea16ccdfa549edd7d7f587b1688e4ac82bfaf057c636bbc7240741a3e5d5"
         #else
         "045c04caaa5c6d24cd590e0b8a1b971296b3d49d066f9c1d2e367ac9d5bae471"
         #endif
