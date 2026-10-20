@@ -4,15 +4,25 @@ import PackageDescription
 let package: Package = .init(
     name: "dollup",
     products: [
-        .plugin(name: "DollupPlugin", targets: ["DollupPlugin"]),
+        .plugin(
+            name: "DollupPlugin",
+            targets: ["DollupPlugin"]
+        ),
+        .executable(
+            name: "dollup",
+            targets: ["DollupBinary"]
+        ),
     ],
     targets: [
-        DollupBinary,
+        binary,
 
         .plugin(
             name: "DollupPlugin",
             capability: .command(
-                intent: .custom(verb: "dollup", description: "format source files"),
+                intent: .custom(
+                    verb: "dollup",
+                    description: "format source files"
+                ),
                 permissions: [.writeToPackageDirectory(reason: "code formatter")],
             ),
             dependencies: [
@@ -22,25 +32,29 @@ let package: Package = .init(
     ]
 )
 
-var DollupBinary: Target {
+var binary: Target {
     var url: String {
         #if os(macOS)
-        "https://get.rarestype.com/dollup/1.1.0/macOS-arm64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.2.0/macOS-arm64/dollup.artifactbundle.zip"
         #elseif arch(x86_64)
-        "https://get.rarestype.com/dollup/1.1.0/Linux-x86_64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.2.0/Linux-x86_64/dollup.artifactbundle.zip"
         #else
-        "https://get.rarestype.com/dollup/1.1.0/Linux-aarch64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.2.0/Linux-aarch64/dollup.artifactbundle.zip"
         #endif
     }
     var checksum: String {
         #if os(macOS)
-        "2f1b9eefda608c2cbbbb5785890c20a48e97ef19d4e78e8a1d1fddb5cb21a843"
+        "2067695cc7a4367f74c69bded5bedbdc101e6088b2f53602306c4300f6244df8"
         #elseif arch(x86_64)
-        "58eb8c20dbca3e3b35409a57a737becfcb796ab678e18696b13df062f9369b48"
+        "f3eea00baff3b9d404dbc8377debc7b98212b03e02574858b8f186e74eb060f8"
         #else
-        "1df75555d111ab18b2d59e60da325b1f8eedeb0473ceea6b7a39cd97c67ef2b1"
+        "d87577eb6231c8ec3bcb38863182b9a24cd13af61c3957cbe334b45e09d1aad2"
         #endif
     }
 
-    return .binaryTarget(name: "DollupBinary", url: url, checksum: checksum)
+    return .binaryTarget(
+        name: "DollupBinary",
+        url: url,
+        checksum: checksum
+    )
 }

@@ -1,24 +1,50 @@
-import PackagePlugin
 import Foundation
+import PackagePlugin
 
 @main struct Main: CommandPlugin {
-    func performCommand(context: PluginContext, arguments: [String]) async throws {
-        let dollup: PluginContext.Tool = try context.tool(named: "dollup")
-        let manifest: URL = context.package.directoryURL.appendingPathComponent("Package.swift")
+    func performCommand(context: PluginContext, arguments _: [String]) async throws {
+        let tool: PluginContext.Tool = try context.tool(named: "dollup")
+        let manifest: URL = context.package.directoryURL.appendingPathComponent(
+            "Package.swift"
+        )
+        let plugins: URL = context.package.directoryURL.appendingPathComponent(
+            "Plugins"
+        )
 
-        try Self.format(file: manifest.path, with: dollup)
+        try Self.run(tool, arguments: [manifest.path, plugins.path])
 
         for case let target as SwiftSourceModuleTarget in context.package.targets {
+            let files: FileList = target.sourceFiles(withSuffix: ".swift")
+            if  files.isEmpty {
+                continue
+            }
+
             print("Formatting '\(target.name)'")
 
-            for file: File in target.sourceFiles(withSuffix: ".swift") {
-                try Self.format(file: file.url.path, with: dollup)
+            let filelist: URL = context.pluginWorkDirectoryURL.appendingPathComponent(
+                "\(target.name).filelist"
+            )
+            var list: String = ""
+            for file: File in files {
+                list += "\(file.url.path)\n"
             }
+            try list.write(to: filelist, atomically: true, encoding: .utf8)
+
+            var invocation: [String] = [
+                "format-as-plugin",
+                "--target", target.name,
+            ]
+            for dependency: any Target in target.recursiveTargetDependencies {
+                invocation += ["--dependency", dependency.name]
+            }
+            invocation += ["--filelist", filelist.path]
+
+            try Self.run(tool, arguments: invocation)
         }
     }
 
-    private static func format(file: String, with tool: PluginContext.Tool) throws {
-        let process: Process = try .run(tool.url, arguments: [file])
+    private static func run(_ tool: PluginContext.Tool, arguments: [String]) throws {
+        let process: Process = try .run(tool.url, arguments: arguments)
         ;   process.waitUntilExit()
 
         guard case .exit = process.terminationReason,
