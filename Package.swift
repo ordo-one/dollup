@@ -35,20 +35,20 @@ let package: Package = .init(
 var binary: Target {
     var url: String {
         #if os(macOS)
-        "https://get.rarestype.com/dollup/1.3.3/macOS-arm64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.3.4/macOS-arm64/dollup.artifactbundle.zip"
         #elseif arch(x86_64)
-        "https://get.rarestype.com/dollup/1.3.3/Linux-x86_64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.3.4/Linux-x86_64/dollup.artifactbundle.zip"
         #else
-        "https://get.rarestype.com/dollup/1.3.3/Linux-aarch64/dollup.artifactbundle.zip"
+        "https://get.rarestype.com/dollup/1.3.4/Linux-aarch64/dollup.artifactbundle.zip"
         #endif
     }
     var checksum: String {
         #if os(macOS)
-        "9db520a7ad259f50678e960a81669de60dc080637a057e056c807ac914e4e955"
+        "de01b3c8964da37ff04b94d4e912b824c6406f48f0a4ac3951e88267ce63b6d0"
         #elseif arch(x86_64)
-        "d3be3777e67bddaf6a676a01b271d14881d464b33eff6ca1b421735d0c743f55"
+        "31fe4d4389e4f9219598fadd4efc96023d52e7fb79833b3357a380f351f46a94"
         #else
-        "e9ad0c09ddbce521d3f18c066a70b9fe632c301723726a70ef233f3687750c0a"
+        "887285992b3587ca615c5bb748dd3eb8a4af556380061ba23d13283859131e46"
         #endif
     }
 
