@@ -2,7 +2,32 @@ import Foundation
 import PackagePlugin
 
 @main struct Main: CommandPlugin {
-    func performCommand(context: PluginContext, arguments _: [String]) async throws {
+    func performCommand(context: PluginContext, arguments: [String]) async throws {
+        // SwiftPM reads its own options anywhere after the verb, and still passes
+        // them through, so set them aside before refusing a subcommand or path
+        var extractor: ArgumentExtractor = .init(arguments)
+        for flag: String in ["allow-writing-to-package-directory", "disable-sandbox"] {
+            _ = extractor.extractFlag(named: flag)
+        }
+        for option: String in [
+                "allow-writing-to-directory",
+                "allow-network-connections",
+                "package",
+            ] {
+            _ = extractor.extractOption(named: option)
+        }
+        if  let argument: String = extractor.remainingArguments.first,
+               !argument.starts(with: "-") {
+            Diagnostics.error(
+                """
+                💔 'dollup' formats the whole package, so it takes no \
+                subcommands or paths, but was given '\(argument)'; \
+                to check the package, run 'swift package dollup-check'
+                """
+            )
+            return
+        }
+
         let tool: PluginContext.Tool = try context.tool(named: "dollup")
         let manifest: URL = context.package.directoryURL.appendingPathComponent(
             "Package.swift"
@@ -11,7 +36,11 @@ import PackagePlugin
             "Plugins"
         )
 
-        try Self.run(tool, arguments: [manifest.path, plugins.path])
+        var invocation: [String] = ["format", manifest.path]
+        if  FileManager.default.fileExists(atPath: plugins.path) {
+            invocation.append(plugins.path)
+        }
+        try Self.run(tool, arguments: invocation)
 
         for case let target as SwiftSourceModuleTarget in context.package.targets {
             let files: FileList = target.sourceFiles(withSuffix: ".swift")
